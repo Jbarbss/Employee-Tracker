@@ -13,95 +13,65 @@ const connection = mysql.createConnection({
 
   // Be sure to update with your own MySQL password!
   password: 'password',
-  database: 'employee_db',
+  database: 'employee_tracker_db',
 });
 
 connection.connect((err) => {
   if (err) throw err;
-//   runSearch();
+  console.log("Server is Live")
+  console.log("\n WELCOME TO EMPLOYEE TRACKER \n");
+  runSearch();
 });
 
-const startTracker = () => {
-    inquirer.prompt([{
-
-        name: 'choice',
-        type: 'list',
-        message: 'Please choose from one of the options below.',
-        choices: [
-            "View all employees",
-            "View all roles",
-            "View all departments",
-            "Update employee role",
-            "Add employee",
-            "Add role",
-            "Add department"
-
-        ]
-    }])
-
-    .then((answer) => {
-        switch (answer.choice) {
-            case 
-            "View all employees":
-            viewEmployees()
-            break;
-
-            case 
-            "View all roles":
-            viewRoles()
-            break;
-
-            case
-            "View all departments":
-            viewDepartment()
-            break;
-            
-            case
-            "Update employee role":
-            updateEmployeeRole()
-            break;
-            
-            case
-            "Add employee":
-            addEmployee()
-            break;
-            
-            case
-            "Add role":
-            addRole()
-            break;
-
-            case
-            "Add department":
-            addDepartment()
-            break;
-        }
-    })
-};
-
-const viewEmployees = () => {
-    connection.query('SELECT * FROM employees'), (err, res) =>{
-        if (err) throw err;
-        console.log (res);
-        console.table(res);
-        startTracker();
+function startProgram() {
+  inquirer.prompt([
+    {
+      type: 'choice',
+      type: 'list',
+      message: 'Please choose from one of the following options',
+      choices: [
+        "View All Employees",
+        "View All Employees by Roles",
+        "View All Employees by Department",
+        "Update Employee",
+        "Add Employee",
+        "Add Role",
+        "Add Department"
+        
+      ]
     }
-};
+  ])
+  .then(function(val) {
+    switch (val.choice) {
+      case  "View All Employees":
+        viewEmployees();
+      break;
 
-const viewRoles = () => {
-    connection.query('SELECT * FROM roles'), (err, res) =>{
-        if (err) throw err;
-        console.log (res);
-        console.table(res);
-        startTracker();
-    }
-};
+      case  "View All Employees by Roles":
+        viewRoles();
+      break;
 
-const viewDepartment = () => {
-    connection.query('SELECT * FROM departments'), (err, res) =>{
-        if (err) throw err;
-        console.log (res);
-        console.table(res);
-        startTracker();
-    }
-};
+      case  "View All Employees by Department":
+        viewDepartments();
+      break;
+
+      case  "Update Employee":
+        updateEmployee();
+      break;
+
+      case  "Add Employee":
+        addEmployee();
+      break;
+
+      case  "Add Role":
+        addRole();
+      break;
+      
+      case  "Add Department":
+        addDepartment();
+      break;
+
+
+    }  
+  })
+}
