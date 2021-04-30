@@ -68,6 +68,8 @@ npm init
 
 ## Usage
 
+Run the following command in Terminal/Bash to start application.
+
 ```
 npm start
 ```
