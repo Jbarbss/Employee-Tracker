@@ -11,9 +11,11 @@
 
 4. [Usage](#usage)
 
-5. [Contributions](#contributions)
+5. [Links](#links)
 
-6. [Questions](#questions)
+6. [Contributions](#contributions)
+
+7. [Questions](#questions)
 
 
 ## Description
@@ -28,6 +30,26 @@ I want to be able to view and manage the departments, roles, and employees in my
 So that I can organize and plan my business
 ```
 
+```
+
+Build a command-line application that at a minimum allows the user to:
+
+  * Add departments, roles, employees
+
+  * View departments, roles, employees
+
+  * Update employee roles
+
+Bonus points if you're able to:
+
+  * Update employee managers
+
+  * View employees by manager
+
+  * Delete departments, roles, and employees
+
+  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
+```
 
 
 
@@ -51,14 +73,7 @@ npm start
 ```
 
 
-
- 
-Screen Shot of Note Taking Application:
-
-
-![ScreenShot](./public/assets/images/Note-Taker.gif )
-
-### Click link to open in your browser.
+### Links
 
 [Deployed Github Repo] https://safe-caverns-44839.herokuapp.com/
 
