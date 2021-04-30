@@ -25,7 +25,7 @@ connection.connect((err) => {
 
 // starting program with prompt
 
-function startProgram() {
+const startProgram = () => {
   inquirer
     .prompt([
       {
@@ -43,7 +43,7 @@ function startProgram() {
         ],
       },
     ])
-    .then(function (val) {
+    .then((val) => {
       switch (val.choice) {
         case "View All Employees":
           viewEmployees();
@@ -74,7 +74,7 @@ function startProgram() {
           break;
       }
     });
-}
+};
 
 // function to view all employees
 
@@ -92,28 +92,197 @@ const viewEmployees = () => {
 
 const viewDepartments = () => {
   console.log("-----------------");
-    connection.query(
-      "SELECT employee.first_name, employee.last_name, department.name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;",     
-      (err, res) => {
+  connection.query(
+    "SELECT employee.first_name, employee.last_name, department.name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;",
+    (err, res) => {
       if (err) throw err;
       console.table(res);
       startProgram();
+    }
+  );
+};
+
+const viewRoles = () => {
+  console.log("-----------------");
+  connection.query(
+    "SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;",
+    (err, res) => {
+      if (err) throw err;
+      console.table(res);
+      startProgram();
+    }
+  );
+};
+
+var roleArray = [];
+const selectRole = () => {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    for (var i = 0; i < res.length; i++) {
+      roleArray.push(res[i].title);
+    }
+  });
+  return roleArray;
+};
+
+var managerArray = [];
+const selectManager = () => {
+  connection.query(
+    "SELECT first_name, last_name FROM employee WHERE manager_id IS NULL",
+    (err, res) => {
+      if (err) throw err;
+      for (var i = 0; i < res.length; i++) {
+        managerArray.push(res[i].first_name);
       }
-    )
-  };
+    }
+  );
+  return managerArray;
+};
 
-
-  const viewRoles = () => {
-    console.log("-----------------");
+const addEmployee = () => {
+  inquirer
+    .prompt([
+      {
+        name: "firstName",
+        type: "input",
+        message: "Enter new employee's first name.",
+      },
+      {
+        name: "lastName",
+        type: "input",
+        message: "Enter new employee's last name.",
+      },
+      {
+        name: "role",
+        type: "list",
+        message: "What is the new employee's role?",
+        choices: selectRole(),
+      },
+      {
+        name: "choice",
+        type: "rawlist",
+        message: "What is their manager's name?",
+        choices: selectManager(),
+      },
+    ])
+    .then((val) => {
+      var roleID = selectRole().indexOf(val.role) + 1;
+      var managerID = selectManager().indexOf(val.choice) + 1;
       connection.query(
-        "SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;",
-        (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        startProgram();
+        "INSERT INTO employee SET ?",
+        {
+          first_name: val.firstName,
+          last_name: val.lastName,
+          manager_id: managerID,
+          role_id: roleID,
+        },
+        (err) => {
+          if (err) throw err;
+          console.table(val);
+          startProgram();
         }
-      )
-    };
+      );
+    });
+};
 
+const updateEmployee = () => {
+  connection.query(
+    "SELECT addEmployee.last_name, role.title FROM employee JOIN role ON employee.role_id = role.id;",
+    (err, res) => {
+      if (err) throw err;
+      console.log(res);
+      inquirer
+        .prompt([
+          {
+            name: "lastName",
+            type: "rawlist",
+            choices: () => {
+              var lastName = [];
+              for (var i = 0; i < res.length; i++) {
+                lastName.push(res[i].last_name);
+              }
+              return lastName;
+            },
+            message: "What is the employee's last name?",
+          },
+          {
+            name: "role",
+            type: "rawlist",
+            message: "What is the employee's new title?",
+            choices: selectRole(),
+          },
+        ])
+        .then((val) => {
+          var roleID = selectRole().indexOf(val.role) + 1;
+          connection.query(
+            "UPDATE employee SET WHERE ?",
+            {
+              last_name: val.lastName,
+            },
+            {
+              role_id: roleID,
+            },
+            (err) => {
+              if (err) throw err;
+              console.table(val);
+              startProgram();
+            }
+          );
+        });
+    }
+  );
+};
 
+const addRole = () => {
+  connection.query(
+    "SELECT role.title AS Title, role.Salary AS Salary FROM role",
+    (err, res) => {
+      inquirer
+        .prompt([
+          {
+            name: "title",
+            type: "input",
+            message: "What is the new employee's salary?",
+          },
+        ])
+        .then((res) => {
+          connection.query(
+            "INSERT INTO role SET ?",
+            {
+              title: res.title,
+              salary: res.salary,
+            },
+            (err) => {
+              if (err) throw err;
+              console.table(res);
+              startProgram();
+            }
+          );
+        });
+    }
+  );
+};
 
+const addDepartment = () => {
+  inquirer
+    .prompt([
+      {
+        name: "name",
+        type: "input",
+        message: "What new department would you like to add?",
+      },
+    ])
+    .then((res) => {
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          name: res.name,
+        },
+        (err) => {
+          if (err) throw err;
+          console.table(res);
+          startProgram();
+        }
+      );
+    });
+};
