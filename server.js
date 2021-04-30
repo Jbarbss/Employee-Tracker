@@ -103,3 +103,17 @@ const viewDepartments = () => {
   };
 
 
+  const viewRoles = () => {
+    console.log("-----------------");
+      connection.query(
+        "SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;",
+        (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        startProgram();
+        }
+      )
+    };
+
+
+
