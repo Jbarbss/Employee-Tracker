@@ -95,6 +95,8 @@ const viewEmployees = () => {
   );
 };
 
+// function to view all departments
+
 const viewDepartments = () => {
   console.log("-----------------");
   connection.query(
@@ -106,6 +108,8 @@ const viewDepartments = () => {
     }
   );
 };
+
+// function to view all roles
 
 const viewRoles = () => {
   console.log("-----------------");
@@ -144,20 +148,8 @@ const selectManager = () => {
   return managerArray;
 };
 
-var departmentArray = [];
-const selectDepartment = () => {
-  connection.query(
-    "SELECT * FROM department", 
-    (err, res) => {
-      if (err) throw err;
-      for (var i = 0; i < res.length; i++) {
-        departmentArray.push(res[i].title);
-      }
 
-    });
-  return departmentArray;
-};
-
+// function to add employees
 const addEmployee = () => {
   inquirer
     .prompt([
@@ -203,6 +195,8 @@ const addEmployee = () => {
       );
     });
 };
+
+// function to update employees
 
 const updateEmployeeRole = () => {
   connection.query("SELECT * FROM role", (err, role) => {
@@ -256,6 +250,7 @@ const updateEmployeeRole = () => {
   });
 };
 
+// function to update employee manager
 
 const updateEmployeeManager = () => {
 connection.query("SELECT * FROM employee", (err, managers) => {
@@ -311,7 +306,7 @@ connection.query("SELECT * FROM employee", (err, managers) => {
 });
 };
 
-
+// function to add role
 const addRole = () => {
   connection.query("SELECT * FROM department", (err, department) => {
     if (err) throw err;
@@ -357,6 +352,9 @@ const addRole = () => {
       });
   });
 };
+
+// function to add department
+
 const addDepartment = () => {
   inquirer
     .prompt([
