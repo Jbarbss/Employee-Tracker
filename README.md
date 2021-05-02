@@ -60,9 +60,9 @@ if not please go here https://nodejs.org/en/download/package-manager/
 
 Once Node.js is installed please enter the following:
 ```
+npm init
 npm install
 
-npm init
 
 ```
 
@@ -77,9 +77,9 @@ npm start
 
 ### Links
 
-[Deployed Github Repo] https://safe-caverns-44839.herokuapp.com/
+[Deployed Github Repo] https://github.com/Jbarbss/Employee-Tracker
 
-[Walk through Video] 
+[Walk through Video] https://drive.google.com/file/d/1YTsoLEC8nlsLDPaOo694EDDgxTdAJnzF/view
 
 
  
